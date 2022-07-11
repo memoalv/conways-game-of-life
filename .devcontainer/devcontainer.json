@@ -1,0 +1,11 @@
+{
+  "name": "ruby-container",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "extensions": [
+    "KoichiSasada.vscode-rdbg",
+    "misogi.ruby-rubocop",
+    "rebornix.ruby"
+  ],
+}
