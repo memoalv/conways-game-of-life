@@ -5,9 +5,13 @@ class GameOfLife
   end
 
   def play
+    compute_next_gen_board @board
+  end
+
+  def compute_next_gen_board(board)
     new_gen_board = initialize_new_generation_board
 
-    @board.each_with_index do |row, x|
+    board.each_with_index do |row, x|
       row.each_with_index do |cell, y|
         next if cell.nil?
 
@@ -26,6 +30,8 @@ class GameOfLife
                               end
       end
     end
+
+    cleanup_extra_bounds new_gen_board
   end
 
   def amount_of_alive_neighbors_for(cell_x, cell_y)
@@ -61,6 +67,15 @@ class GameOfLife
     neighbors
   end
 
+  def cleanup_extra_bounds(board)
+    x = board.size - 1
+
+    board.slice!(x)
+    board.slice!(0)
+
+    board.map!(&:compact)
+  end
+
   def increment_boards_bounds_with_nils(board)
     board.unshift Array.new(@bounds, nil)
     board << Array.new(@bounds, nil)
@@ -75,11 +90,9 @@ class GameOfLife
     new_board = []
 
     1..@bounds.times do
-      new_board << Array.new(3, 0)
+      new_board << Array.new(@bounds - 1, 0)
     end
 
     increment_boards_bounds_with_nils new_board
   end
 end
-
-p GameOfLife.new([[0, 1, 0], [1, 1, 0], [0, 0, 0]]).play
